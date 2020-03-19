@@ -29,9 +29,9 @@ class TurtleKeyboardController:
 		if rospy.has_param("turtle_control"):
 			turtle_control = rospy.get_param("turtle_control")
 			for key in self.default_control.keys():				# check if all direction keys are defined
-					if key not in turtle_control.keys():		# if key is not defined, set default value
-						rospy.loginfo(key + " control not found, setting default...")
-						turtle_control[key] = self.default_control[key]
+				if key not in turtle_control.keys():		# if key is not defined, set default value
+					rospy.loginfo(key + " control not found, setting default...")
+					turtle_control[key] = self.default_control[key]
 
 			return turtle_control
 		else:	# if parameter is missing

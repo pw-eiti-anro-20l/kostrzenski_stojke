@@ -18,7 +18,6 @@ class TurtleKeyboardController:
 		rospy.init_node('turtle_keyboard_controller', anonymous=True)
 		self.publisher = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
 		self.turtle_control = self.get_turtle_controls()			# load turtle controls
-
 		
 	def start(self):
 		self.keyboard_listener = Listener(on_press=self.key_pressed) # start key listener

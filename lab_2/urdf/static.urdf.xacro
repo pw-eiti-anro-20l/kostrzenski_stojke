@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<robot name="visual" xmlns:xacro="https://ros.org/wiki/xacro">
+
+	<xacro:property name="params" value="${load_yaml('../yaml/params.yaml')}"/>
+
+	<material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+	<link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.05" radius="0.2"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+		<collision>
+      <geometry>
+        <cylinder length="0.05" radius="0.2"/>
+      </geometry>
+    </collision>
+  </link>
+
+	<link name="i1">
+    <visual>
+      <geometry>
+        <cylinder length="${params['i1_h']}" radius="${params['i1_r']}"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0.0 0 0"/>
+      <material name="white"/>
+    </visual>
+		<collision>
+      <geometry>
+        <cylinder length="${params['i1_h']}" radius="${params['i1_r']}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+	<joint name="i_1" type="fixed">
+    <parent link="base_link"/>
+    <child link="i1"/>
+    <origin rpy = "0.0 -0.0 0.0" xyz= "0 0 1.0"/>
+  </joint>
+
+	<link name="i2">
+		<visual>
+			<geometry>
+				<cylinder length="${params['i2_h']}" radius="${params['i2_r']}"/>
+			</geometry>
+			<origin rpy= "0 0 0" xyz="0.0 0 0"/>
+			<material name="blue"/>
+		</visual>
+	<collision>
+      <geometry>
+        <cylinder length="${params['i2_h']}" radius="${params['i2_r']}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+	</link>
+
+	<joint name="i_2" type="fixed">
+    <parent link="i1"/>
+    <child link="i2"/>
+    <origin rpy = "1.57 -0.0 1.57 " xyz= "0.0 0.0 1.0"/>
+  </joint>
+
+	<link name="i3">
+		<visual>
+			<geometry>
+				<cylinder length="${params['i3_h']}" radius="${params['i3_r']}"/>
+			</geometry>
+			<origin rpy= "0 0 0" xyz="0.0 0 0"/>
+			<material name="blue"/>
+		</visual>
+	<collision>
+      <geometry>
+        <cylinder length="${params['i3_h']}" radius="${params['i3_r']}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+	</link>
+
+	<joint name="i_3" type="fixed">
+    <parent link="i2"/>
+    <child link="i3"/>
+    <origin rpy = "1.57 -0.0 1.57 " xyz= "0.0 0.0 1.0"/>
+  </joint>
+
+</robot>
+

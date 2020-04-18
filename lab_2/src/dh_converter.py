@@ -4,10 +4,10 @@ from tf.transformations import *
 import json
 
 def dh_to_urdf():
-	json_reader = open('../yaml/dh_params.json', 'r')
+	json_reader = open('/home/lukasz/catkin_ws/src/kostrzenski_stojke/lab_2/yaml/dh_params.json', 'r')
 	dh_params = json.loads(json_reader.read())
 
-	urdf_file_writer = open('../yaml/urdf.yaml', 'w')
+	urdf_file_writer = open('/home/lukasz/catkin_ws/src/kostrzenski_stojke/lab_2/yaml/urdf.yaml', 'w')
 	axis_x = (1, 0, 0)
 	axis_z = (0, 0, 1)
 

@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="model" default="$(find lab_2)/urdf/visual.urdf.xacro"/>
+  <arg name="model" default="$(find lab_2)/urdf/dynamic.urdf.xacro"/>
   <arg name="gui" default="true" />
   <arg name="rvizconfig" default="$(find lab_2)/rviz/urdf.rviz" />
 

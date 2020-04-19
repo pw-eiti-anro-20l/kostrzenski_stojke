@@ -1,7 +1,0 @@
-dependent_joints:
-i_1: {parent: base_link}
-i_2: {parent: i_1}
-i_3: {parent: i_2}
-zeros:
-i_2: 1.57
-i_3: 1.57

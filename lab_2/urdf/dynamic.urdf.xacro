@@ -2,7 +2,8 @@
 <robot name="visual" xmlns:xacro="https://ros.org/wiki/xacro">
 
 	<xacro:property name="params" value="${load_yaml('../yaml/params.yaml')}"/>
-	
+	<xacro:property name="param" value="${load_yaml('../yaml/urdf.yaml')}"/>
+
 
 	<material name="blue">
     <color rgba="0 0 0.8 1"/>
@@ -16,14 +17,16 @@
 
 	<link name="base_link">
     <visual>
+			<origin xyz = "0 0 ${params['base_h']/2}"/>
       <geometry>
-        <cylinder length="0.05" radius="0.2"/>
+        <cylinder length="${params['base_h']}" radius="${params['base_r']}"/>
       </geometry>
       <material name="white"/>
     </visual>
 		<collision>
+			<origin xyz = "0 0 ${params['base_h']/2}"/>
       <geometry>
-        <cylinder length="0.05" radius="0.2"/>
+        <cylinder length="${params['base_h']}" radius="${params['base_r']}"/>
       </geometry>
     </collision>
   </link>
@@ -31,14 +34,15 @@
 	<link name="i1">
     <visual>
       <geometry>
-        <cylinder length="${params['i1_h']}" radius="${params['i1_r']}"/>
+        <box size="${params['i1_a']} ${params['i1_b']} ${params['d1']}"/>
       </geometry>
-      <origin rpy="0 0 0 " xyz="0.0 0 0"/>
+      <origin rpy="0 0 0 " xyz="0.0 0 ${params['d1']/2}"/>
       <material name="blue"/>
     </visual>
 		<collision>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d1']/2}"/>
       <geometry>
-        <cylinder length="${params['i1_h']}" radius="${params['i1_r']}"/>
+        <box size="${params['i1_a']} ${params['i1_b']} ${params['d1']}"/>
       </geometry>
     </collision>
     <inertial>
@@ -51,20 +55,21 @@
     <parent link="base_link"/>
     <child link="i1"/>
 		<axis xyz="0 0 1"/>
-    <origin rpy = "0.0 -0.0 0.0" xyz= "0 0 1.0"/>
+    <origin rpy = "${param['i_1']['joint_rpy']}" xyz= "0 0 ${params['base_h']}"/>
   </joint>
 
 	<link name="i2">
 		<visual>
 			<geometry>
-				<cylinder length="${params['i2_h']}" radius="${params['i2_r']}"/>
+				<cylinder length="${params['d2']-params['i1_b']}" radius="${params['i2_r']}"/>
 			</geometry>
-			<origin rpy= "0 0 0" xyz="0.0 0 0"/>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d2']/2}"/>
 			<material name="black"/>
 		</visual>
 	<collision>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d2']/2}"/>
       <geometry>
-        <cylinder length="${params['i2_h']}" radius="${params['i2_r']}"/>
+        <cylinder length="${params['d2']}" radius="${params['i2_r']}"/>
       </geometry>
     </collision>
     <inertial>
@@ -77,20 +82,21 @@
     <parent link="i1"/>
     <child link="i2"/>
 		<axis xyz="0 0 1"/>
-    <origin rpy = "1.57 -0.0 1.57 " xyz= "1.0 0.0 0.0"/>
+    <origin rpy = "${param['i_2']['joint_rpy']}" xyz= "${param['i_2']['joint_xyz']}"/>
   </joint>
 
 	<link name="i3">
 		<visual>
 			<geometry>
-				<cylinder length="${params['i3_h']}" radius=" ${params['i3_r']}"/>
+				<cylinder length="${params['d3']-params['i2_r']}" radius=" ${params['i3_r']}"/>
 			</geometry>
-			<origin rpy= "0 0 0" xyz="0.0 0 0"/>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d3']/2}"/>
 			<material name="white"/>
 		</visual>
 	<collision>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d3']/2}"/>
       <geometry>
-        <cylinder length="${params['i3_h']}" radius="${params['i3_r']}"/>
+        <cylinder length="${params['d3']}" radius="${params['i3_r']}"/>
       </geometry>
     </collision>
     <inertial>
@@ -99,23 +105,23 @@
     </inertial>
 	</link>
 
-	<joint name="i_3" type="revolute">
+	<joint name="i_3" type="continuous">
     <parent link="i2"/>
     <child link="i3"/>
-		<limit effort="100.0" lower="-1.57" upper="1.57" velocity="0.5"/>
 		<axis xyz="0 0 1"/>
-    <origin rpy = "1.57 -0.0 1.57 " xyz= "1.0 0.0 0.0"/>
+    <origin rpy = "${param['i_3']['joint_rpy']}" xyz= "${param['i_3']['joint_xyz']}"/>
   </joint>
 
 	<link name="tool">
 		<visual>
 			<geometry>
-				<box size="${params['tool_a']} ${params['tool_b']} ${params['tool_c']}"/>
+				<box size="${params['tool_a']} ${params['tool_b']-params['i3_r']} ${params['tool_c']}"/>
 			</geometry>
-			<origin rpy= "0 0 0" xyz="0.0 0 0"/>
+			<origin rpy= "0 0 0" xyz="0.0 ${params['tool_b']/2} 0"/>
 			<material name="blue"/>
 		</visual>
 	<collision>
+			<origin rpy= "0 0 0" xyz="0.0 ${params['tool_b']/2} 0 "/>
       <geometry>
         <box size="${params['tool_a']} ${params['tool_b']} ${params['tool_c']}"/>
       </geometry>
@@ -129,7 +135,7 @@
 	<joint name="tool_joint" type="fixed">
     <parent link="i3"/>
     <child link="tool"/>
-    <origin rpy = "0.0 0.0 0.0" xyz= "0.0 0.5 0.0"/>
+    <origin rpy = "0.0 0.0 0.0" xyz= "0.0 0.0 ${params['d3']}"/>
   </joint>
 
 </robot>

@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<robot name="visual" xmlns:xacro="https://ros.org/wiki/xacro">
+
+	<xacro:property name="params" value="${load_yaml('../yaml/params.yaml')}"/>
+	<xacro:property name="param" value="${load_yaml('../yaml/urdf.yaml')}"/>
+
+
+	<material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+	<link name="base_link">
+    <visual>
+			<origin xyz = "0 0 ${params['base_h']/2}"/>
+      <geometry>
+        <cylinder length="${params['base_h']}" radius="${params['base_r']}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+		<collision>
+			<origin xyz = "0 0 ${params['base_h']/2}"/>
+      <geometry>
+        <cylinder length="${params['base_h']}" radius="${params['base_r']}"/>
+      </geometry>
+    </collision>
+  </link>
+
+	<link name="i1">
+    <visual>
+      <geometry>
+        <box size="${params['i1_a']} ${params['i1_b']} ${params['d1']}"/>
+      </geometry>
+      <origin rpy="0 0 0 " xyz="0.0 0 ${params['d1']/2}"/>
+      <material name="blue"/>
+    </visual>
+		<collision>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d1']/2}"/>
+      <geometry>
+        <box size="${params['i1_a']} ${params['i1_b']} ${params['d1']}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+	<joint name="i_1" type="prismatic">
+    <parent link="base_link"/>
+    <child link="i1"/>
+		<limit effort="1000.0" lower="0" upper="1.0" velocity="0.5"/>
+		<axis xyz="0 0 1"/>
+    <origin rpy = "${param['i_1']['joint_rpy']}" xyz= "0 0 ${params['base_h']}"/>
+  </joint>
+
+	<link name="i2">
+		<visual>
+			<geometry>
+				<cylinder length="${params['d2']-params['i1_b']}" radius="${params['i2_r']}"/>
+			</geometry>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d2']/2}"/>
+			<material name="black"/>
+		</visual>
+	<collision>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d2']/2}"/>
+      <geometry>
+        <cylinder length="${params['d2']}" radius="${params['i2_r']}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+	</link>
+
+	<joint name="i_2" type="prismatic">
+    <parent link="i1"/>
+    <child link="i2"/>
+		<limit effort="1000.0" lower="-1.0" upper="0.0" velocity="0.5"/>
+		<axis xyz="0 0 1"/>
+    <origin rpy = "${param['i_2']['joint_rpy']}" xyz= "${param['i_2']['joint_xyz']}"/>
+  </joint>
+
+	<link name="i3">
+		<visual>
+			<geometry>
+				<cylinder length="${params['d3']-params['i2_r']}" radius=" ${params['i3_r']}"/>
+			</geometry>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d3']/2}"/>
+			<material name="white"/>
+		</visual>
+	<collision>
+			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d3']/2}"/>
+      <geometry>
+        <cylinder length="${params['d3']}" radius="${params['i3_r']}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+	</link>
+
+	<joint name="i_3" type="prismatic">
+    <parent link="i2"/>
+    <child link="i3"/>
+		<limit effort="1000.0" lower="-1.0" upper="0.0" velocity="0.5"/>
+		<axis xyz="0 0 1"/>
+    <origin rpy = "${param['i_3']['joint_rpy']}" xyz= "${param['i_3']['joint_xyz']}"/>
+  </joint>
+
+	<link name="tool">
+		<visual>
+			<geometry>
+				<box size="${params['tool_a']} ${params['tool_b']-params['i3_r']} ${params['tool_c']}"/>
+			</geometry>
+			<origin rpy= "0 0 0" xyz="0.0 ${params['tool_b']/2} 0"/>
+			<material name="blue"/>
+		</visual>
+	<collision>
+			<origin rpy= "0 0 0" xyz="0.0 ${params['tool_b']/2} 0 "/>
+      <geometry>
+        <box size="${params['tool_a']} ${params['tool_b']} ${params['tool_c']}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+	</link>
+	
+	<joint name="tool_joint" type="fixed">
+    <parent link="i3"/>
+    <child link="tool"/>
+    <origin rpy = "0.0 0.0 0.0" xyz= "0.0 0.0 ${params['d3']}"/>
+  </joint>
+
+</robot>
+

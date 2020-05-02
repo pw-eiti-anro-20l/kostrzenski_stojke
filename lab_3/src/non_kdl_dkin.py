@@ -2,25 +2,27 @@
 
 import rospy
 from geometry_msgs.msg import PoseStamped
+from sensor_msgs.msg import JointState
+import os
 import json
 
 class NonKdlDkin:
 
-	def __init__():
+	def __init__(self):
 		rospy.init_node("non_kdl_dkin", anonymous=True)
 		self.load_dh_params()
 		self.setup_publisher()
 		self.start_listening_to_topic()
 		rospy.spin()
 
-	def load_dh_params():
+	def load_dh_params(self):
 		json_reader = open('../yaml/dh_params.json', 'r')
 		self.dh_params = json.loads(json_reader.read())
 
-	def setup_publisher():
+	def setup_publisher(self):
 		self.publisher = rospy.Publisher('/geometry_msgs', PoseStamped, queue_size=10)
 
-	def start_listening_to_topic():
+	def start_listening_to_topic(self):
 		rospy.Subscriber("/sensor_msgs", JointState, publish_position_to_rviz)
 
 	def publish_position_to_rviz(position):
@@ -33,7 +35,7 @@ class NonKdlDkin:
 
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
 	try:
 		NonKdlDkin()
 	except rospy.ROSInterruptException:

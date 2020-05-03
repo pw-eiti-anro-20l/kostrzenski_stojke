@@ -13,6 +13,7 @@ class NonKdlDkin:
 	def __init__(self):
 		rospy.init_node("non_kdl_dkin", anonymous=True)
 		self.load_dh_params()
+		self.load_restrictions()
 		self.setup_publisher()
 		self.start_listening_to_topic()
 		rospy.spin()
@@ -24,6 +25,11 @@ class NonKdlDkin:
 			buf = self.dh_params["i_3"]
 			self.dh_params["i_3"] = self.dh_params["i_1"]
 			self.dh_params["i_1"] = buf 
+	def load_restrictions(self):
+		path = os.path.realpath(__file__)
+		with open(os.path.dirname(path) + '/../yaml/restrictions.json') as rest:
+			self.restrictions = json.loads(rest.read())	
+
 
 	def setup_publisher(self):
 		self.publisher = rospy.Publisher('/geometry_msgs', PoseStamped, queue_size=10)
@@ -35,7 +41,7 @@ class NonKdlDkin:
 		x_axis = (1, 0, 0)
 		z_axis = (0, 0, 1)
 		matrix = translation_matrix((0, 0, 0))
-		
+		publish = True
 		link_counter = 0
 		for key in self.dh_params.keys():
 			a, d, alpha, theta = self.dh_params[key]

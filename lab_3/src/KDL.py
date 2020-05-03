@@ -9,13 +9,22 @@ from geometry_msgs.msg import PoseStamped
 import math
 from tf.transformations import *
 
-xAxis = (1,0,0)
-yAxis = (0,1,0)
-zAxis = (0,0,1)
+def check(pose):
+	if pose.position[0] < restrictions['i_1'][0] or pose.position[0] > restrictions['i_1'][1]:
+		return False
+	if pose.position[1] < restrictions['i_2'][0] or pose.position[1] > restrictions['i_2'][1]:
+		return False
+	if pose.position[2] < restrictions['i_3'][0] or pose.position[2] > restrictions['i_3'][1]:
+		return False
+	return True
 
 
 def kin_fwd(params):
 	publish = True
+	if not check(params):
+		publish = False
+		rospy.logerr('Impossible position: ' + str(params))
+		return
 	k=1
 	chain = pykdl.Chain()
 	frame = pykdl.Frame()
@@ -57,8 +66,8 @@ def kin_fwd(params):
 	pose.pose.orientation.y = quater[1]
 	pose.pose.orientation.z = quater[2]		
 	pose.pose.orientation.w = quater[3]
-	
-	publisher.publish(pose)
+	if publish:
+		publisher.publish(pose)
 
 if __name__ == '__main__':
 
@@ -69,7 +78,11 @@ if __name__ == '__main__':
 		buf = parametres["i_3"]
 		parametres["i_3"] = parametres["i_1"]
 		parametres["i_1"] = buf
-		print(parametres)
+
+	restrictions = {}
+	path = os.path.realpath(__file__)
+	with open(os.path.dirname(path) + '/../yaml/restrictions.json') as rest:
+		restrictions = json.loads(rest.read())
 
 	rospy.init_node('KDL', anonymous=True)
 	publisher=rospy.Publisher('KDL', PoseStamped, queue_size=10)

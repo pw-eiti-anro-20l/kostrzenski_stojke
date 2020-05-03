@@ -4,4 +4,5 @@
 	<param name="use_gui" value="$(arg gui)"/>
 	<param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
 	<node name="KDL" pkg="lab_3" type="KDL.py"/>
+	<node name="nonKDL" pkg="lab_3" type="non_kdl_dkin.py"/>
 </launch>

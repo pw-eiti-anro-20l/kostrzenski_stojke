@@ -51,7 +51,7 @@
     </inertial>
   </link>
 
-	<joint name="i_1" type="revolute">
+	<joint name="i_1" type="prismatic">
     <parent link="base_link"/>
     <child link="i1"/>
 		<limit effort="1000.0" lower="0" upper="1.0" velocity="0.5"/>
@@ -79,7 +79,7 @@
     </inertial>
 	</link>
 
-	<joint name="i_2" type="revolute">
+	<joint name="i_2" type="prismatic">
     <parent link="i1"/>
     <child link="i2"/>
 		<limit effort="1000.0" lower="-1.0" upper="0.0" velocity="0.5"/>

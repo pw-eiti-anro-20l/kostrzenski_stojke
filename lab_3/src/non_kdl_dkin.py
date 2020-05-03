@@ -18,11 +18,12 @@ class NonKdlDkin:
 		rospy.spin()
 
 	def load_dh_params(self):
-		json_reader = open('../yaml/dh_params.json', 'r')
-		self.dh_params = json.loads(json_reader.read())
-		buf = self.dh_params["i_3"]
-		self.dh_params["i_3"] = self.dh_params["i_1"]
-		self.dh_params["i_1"] = buf 
+		path = os.path.realpath(__file__)
+		with open(os.path.dirname(path) + '/../yaml/dh_params.json') as params:
+			self.dh_params = json.loads(params.read())
+			buf = self.dh_params["i_3"]
+			self.dh_params["i_3"] = self.dh_params["i_1"]
+			self.dh_params["i_1"] = buf 
 
 	def setup_publisher(self):
 		self.publisher = rospy.Publisher('/geometry_msgs', PoseStamped, queue_size=10)

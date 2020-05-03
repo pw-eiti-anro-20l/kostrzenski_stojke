@@ -1,11 +1,11 @@
 #! /usr/bin/python
 
 import rospy
-import json
+from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import JointState
+import os
 from tf.transformations import *
 from visualization_msgs.msg import Marker
-from geometry_msgs.msg import PoseStamped
 
 class NonKdlDkin:
 

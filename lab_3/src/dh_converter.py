@@ -20,7 +20,7 @@ def dh_to_urdf():
 		z_translation = translation_matrix((0, 0, d))  
 		z_rotation = rotation_matrix(theta, axis_z)      
 
-		dh = concatenate_matrices(z_translation, z_rotation, x_translation, x_rotation)  
+		dh = concatenate_matrices(x_rotation, x_translation, z_rotation, z_translation )  
 		rpy_params = euler_from_matrix(dh)
 		xyz_params = translation_from_matrix(dh)
 

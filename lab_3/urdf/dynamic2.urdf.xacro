@@ -36,7 +36,7 @@
       <geometry>
         <box size="${params['i1_a']} ${params['i1_b']} ${params['d1']}"/>
       </geometry>
-      <origin rpy="0 0 0 " xyz="0.0 0 ${params['d1']/2}"/>
+      <origin rpy="0 0 0 " xyz="0.0 0.0 -${params['d1']/2}"/>
       <material name="blue"/>
     </visual>
 		<collision>
@@ -64,7 +64,7 @@
 			<geometry>
 				<cylinder length="${params['d2']-params['i1_b']}" radius="${params['i2_r']}"/>
 			</geometry>
-			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d2']/2}"/>
+			<origin rpy="0 0 0 " xyz="0.0 0.0 -${params['d2']/2}"/>
 			<material name="black"/>
 		</visual>
 	<collision>
@@ -92,7 +92,7 @@
 			<geometry>
 				<cylinder length="${params['d3']-params['i2_r']}" radius=" ${params['i3_r']}"/>
 			</geometry>
-			<origin rpy="0 0 0 " xyz="0.0 0 ${params['d3']/2}"/>
+			<origin rpy="0 0 0 " xyz="0.0 0.0 -${params['d3']/2}"/>
 			<material name="white"/>
 		</visual>
 	<collision>
@@ -138,7 +138,7 @@
 	<joint name="tool_joint" type="fixed">
     <parent link="i3"/>
     <child link="tool"/>
-    <origin rpy = "0.0 0.0 0.0" xyz= "0.0 0.0 ${params['d3']}"/>
+    <origin rpy = "0.0 0.0 0.0" xyz= "0.0 0.0 0.0"/>
   </joint>
 
 </robot>

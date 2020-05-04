@@ -24,7 +24,8 @@ class NonKdlDkin:
 			self.dh_params = json.loads(params.read())
 			buf = self.dh_params["i_3"]
 			self.dh_params["i_3"] = self.dh_params["i_1"]
-			self.dh_params["i_1"] = buf 
+			self.dh_params["i_1"] = buf
+
 	def load_restrictions(self):
 		path = os.path.realpath(__file__)
 		with open(os.path.dirname(path) + '/../yaml/restrictions.json') as rest:
@@ -37,22 +38,29 @@ class NonKdlDkin:
 	def start_listening_to_topic(self):
 		rospy.Subscriber("/joint_states", JointState, self.publish_position_to_rviz)
 
-	def publish_position_to_rviz(self, position):
+	def check(self, pose):
+		if pose.position[0] < self.restrictions['i_1'][0] or pose.position[0] > self.restrictions['i_1'][1]:
+			return False
+		if pose.position[1] < self.restrictions['i_2'][0] or pose.position[1] > self.restrictions['i_2'][1]:
+			return False
+		if pose.position[2] < self.restrictions['i_3'][0] or pose.position[2] > self.restrictions['i_3'][1]:
+			return False
+		return True
+
+	def publish_position_to_rviz(self, pose):
+		if(self.check(pose) == False):
+			rospy.logerr('Impossible position: ' + str(pose))
+			return
+
 		x_axis = (1, 0, 0)
 		z_axis = (0, 0, 1)
 		matrix = translation_matrix((0, 0, 0))
-		publish = True
 		link_counter = 0
 		for key in self.dh_params.keys():
 			a, d, alpha, theta = self.dh_params[key]
 			a, d, alpha, theta = float(a), float(d), float(alpha), float(theta)
-			print(link_counter)
-			print(a)
-			print(d)
-			print(alpha)
-			print(theta)
 
-			d_translation = translation_matrix((0, 0, d + position.position[link_counter]))
+			d_translation = translation_matrix((0, 0, d + pose.position[link_counter]))
 			theta_rotation = rotation_matrix(theta, z_axis)
 			a_translation = translation_matrix((a, 0, 0))
 			alpha_rotation = rotation_matrix(alpha, x_axis)

@@ -3,4 +3,4 @@ float64 j2
 float64 j3
 float64 time
 ---
-string status
+bool status

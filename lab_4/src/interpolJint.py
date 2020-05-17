@@ -21,8 +21,8 @@ def interpol(jReq):
 	change = start
 	step=[0,0,0]
 	step[0]=(end[0]-start[0])/(freq*jReq.time)
-	step[1]=(end[0]-start[0])/(freq*jReq.time)
-	step[2]=(end[0]-start[0])/(freq*jReq.time)
+	step[1]=(end[1]-start[1])/(freq*jReq.time)
+	step[2]=(end[2]-start[2])/(freq*jReq.time)
 
 
 	for k in range(0, int(freq*jReq.time)+1):

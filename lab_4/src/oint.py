@@ -53,7 +53,7 @@ class OintInterpolator:
 		how_many_frames = int(math.ceil(data.t * self.frequency))
 		current_time = 1.0 / self.frequency
 
-		for i in range(how_many_frames + 1):
+		for i in range(how_many_frames):
 			x = self.calculate_step(self.current_position[0], new_position[0], current_time, data.t)
 			y = self.calculate_step(self.current_position[1], new_position[1], current_time, data.t)
 			z = self.calculate_step(self.current_position[2], new_position[2], current_time, data.t)

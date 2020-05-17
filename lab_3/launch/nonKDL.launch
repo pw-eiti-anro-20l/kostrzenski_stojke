@@ -1,0 +1,7 @@
+<launch>
+	<arg name="model" default="$(find lab_3)/urdf/dynamic2.urdf.xacro"/>
+	<arg name="gui" default="true" />
+	<param name="use_gui" value="$(arg gui)"/>
+	<param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
+	<node name="KDL" pkg="lab_2" type="KDL.py"/>
+</launch>

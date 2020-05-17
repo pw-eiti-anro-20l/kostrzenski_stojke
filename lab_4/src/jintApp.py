@@ -2,11 +2,10 @@
 
 
 import rospy
-from lab_4.srv import Jint2
+from lab_4.srv import Jint
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 import math
-import os
 
 freq = 50 
 flag = 0 
@@ -22,23 +21,19 @@ def interpolate(jMsg):
 	for k in range(0, int(freq*jMsg.time)+1):
 		for i in range(0, 3):
 			change[i]=change[i] + step[i]
-			rate = rospy.Rate(50)
 		pose_str = JointState()
 		pose_str.header.stamp = rospy.Time.now()
 		pose_str.name = ['base_i1', 'i1_i2', 'i2_i3']
 		pose_str.position = [change[0], change[1], change[2]]
 		publisher.publish(pose_str)
-		rate.Sleep()
+		rate.sleep()
 	curr_time = 0
 	start = end
 	return True
 
 if __name__ == "__main__":
 	rospy.init_node('int_srv')
-	jints={}
-	path = os.path.realpath(__file__)
-	with open(os.path.dirname(path) + '/../srv/jint.srv') as servi:
-		jints = servi.read()
+	rate = rospy.Rate(50)
 	publisher = rospy.Publisher('joint_states',JointState, queue_size=10)
-	s = rospy.Service('int', Jint2, interpolate)
+	s = rospy.Service('int', Jint, interpolate)
 	rospy.spin()

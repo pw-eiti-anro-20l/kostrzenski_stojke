@@ -9,9 +9,7 @@
 
   <param name="use_gui" value="$(arg gui)"/>
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
-		<rosparam param="source_list">["jint"]</rosparam>	
-	</node>
+
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
 </launch>

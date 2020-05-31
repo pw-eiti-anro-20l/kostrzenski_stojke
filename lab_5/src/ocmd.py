@@ -8,16 +8,16 @@ from lab_5.srv import oint
 
 def circle():
     freq = 30.0
-    ax = 0.1
-    ay = 0.05
-    az = 0.02
+    ax = 0.3
+    ay = 0.2
+    az = 0.2
     th = 0.0
-    dth = 3.1415 / freq
+    dth = 0.5 * 3.1415 / freq
 
     t = 1.0 / freq
-    x0 = 1.0
-    y0 = 0.0
-    z0 = 0.0
+    x0 = 0.5
+    y0 = -0.5
+    z0 = 0.8
 
     rospy.wait_for_service('oint_control_srv')
     rate = rospy.Rate(freq)

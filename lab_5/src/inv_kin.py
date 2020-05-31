@@ -1,82 +1,32 @@
 #!/usr/bin/env python
 
-import json
-from collections import OrderedDict
-import os
 import rospy
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Header
-from math import atan2, sqrt, pi
 
 
-def inverse_kinematics(data):
-    global a2
-    global a3
-    global current_theta
-    global rest
+def handle_inversion(data):
 
     x = data.pose.position.x
     y = data.pose.position.y
     z = data.pose.position.z
 
-    #if x**2 + y**2 <= 0.:
-     #   rospy.logerr('Warning. Position infinite.')
-      #  return
-
-    theta = [None]*3
-
-    c3 = (x**2 + y**2 + z**2 - a2**2 - a3**2)/(2*a2*a3)
-    try:
-        s3 = sqrt(1 - c3**2)
-    except ValueError:
-        rospy.logerr('Warning. Wrong position.')
-        return
-
-    check = False
-
-
-    if abs(atan2(y, x) - current_theta[0]) < abs((atan2(-y, -x)) - current_theta[0]):
-        theta[0] = atan2(y, x)
-        check = True
-    else:
-        theta[0] = atan2(-y, -x)
-
-   
-    if abs(atan2(s3, c3) - current_theta[2]) < abs(atan2(-s3, c3) - current_theta[2]):
-        theta[2] = atan2(s3, c3)
-        if check:
-            theta[1] = atan2(-z, sqrt(x**2 + y**2)) - atan2(a3*s3, a2 + a3*c3)
-        else:
-            theta[1] = pi - atan2(-z, sqrt(x**2 + y**2)) + atan2(a3*s3, a2 + a3*c3)
-    else:
-        theta[2] = atan2(-s3, c3)
-        if check:
-            theta[1] = atan2(-z, sqrt(x**2 + y**2)) - atan2(-a3*s3, a2 + a3*c3)
-        else:
-            theta[1] = pi - atan2(-z, sqrt(x**2 + y**2)) + atan2(-a3*s3, a2 + a3*c3)
-
-    #rospy.logerr(theta)
-
-    current_theta = theta
-    jointState = JointState()
-    jointState.header = Header()
-    jointState.header.stamp = rospy.Time.now()
-    jointState.name = ['i_1', 'i_2', 'i_3']
-    jointState.position = theta
-    jointState.velocity = []
-    jointState.effort = []
+    if x > 1.0 or x < 0.0 or y > 0.0 or y < -1.0 or z < 0.0 or z > 1.0:
+    	rospy.logerr('Incorrect position - x: ' + str(x) + ', y: ' + str(y) + ', z: ' + str(z))
+    	return
+    
+    joint_state = JointState()
+    joint_state.header = Header()
+    joint_state.header.stamp = rospy.Time.now()
+    joint_state.name = ['i_1', 'i_2', 'i_3']
+    joint_state.position = [z-1, -y-1, x-1]
 
     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
-    pub.publish(jointState)
+    pub.publish(joint_state)
 
 
 if __name__ == "__main__":
-
-    a2 = 1
-    a3=0.2
-    current_theta = [0.0]*3
-
     rospy.init_node('ikin', anonymous=True)
-    rospy.Subscriber('oint', PoseStamped, inverse_kinematics)
+    rospy.Subscriber('oint', PoseStamped, handle_inversion)
     rospy.spin()

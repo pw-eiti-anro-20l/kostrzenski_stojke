@@ -1,0 +1,21 @@
+i_3: 
+ joint_xyz: 0.0 -0.999999682932 0.000796326710733 
+ joint_rpy: 0.785398004863 -1.5696701507 0.785398004863 
+ link_xyz: 0.0 0 0 
+ link_rpy: 0 0 0 
+ link_length: 0.0 
+
+i_2: 
+ joint_xyz: 0.0 -0.999999682932 0.000796326710733 
+ joint_rpy: 0.785398004863 -1.5696701507 0.785398004863 
+ link_xyz: 0.0 0 0 
+ link_rpy: 0 0 0 
+ link_length: 0.0 
+
+i_1: 
+ joint_xyz: 0.0 0.0 1.0 
+ joint_rpy: 0.0 -0.0 0.0 
+ link_xyz: 0.0 0 0 
+ link_rpy: 0 0 0 
+ link_length: 0.0 
+

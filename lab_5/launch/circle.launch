@@ -1,6 +1,6 @@
 <launch>
 	
-    <arg name="model" default="$(find lab_2)/urdf/dynamic.urdf.xacro"/>
+    <arg name="model" default="$(find lab_5)/urdf/dynamic2.urdf.xacro"/>
     <arg name="rvizconfig" default="$(find lab_2)/rviz/urdf.rviz" />
     <arg name="gui" default="false" />
 
@@ -9,8 +9,6 @@
     <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
 
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-
     <node name="rviz" pkg="rviz" type="rviz" args ="-d $(arg rvizconfig)" required="true"/>
     <node name="oint" pkg="lab_5" type="oint.py"/>
-    <node name="ikin" pkg="lab_5" type="inv_kin.py"/>
 </launch>

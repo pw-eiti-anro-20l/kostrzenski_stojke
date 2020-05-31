@@ -67,7 +67,7 @@ def inverse_kinematics(data):
     jointState.velocity = []
     jointState.effort = []
 
-    pub = rospy.Publisher('Jint', JointState, queue_size=10)
+    pub = rospy.Publisher('joint_states', JointState, queue_size=10)
     pub.publish(jointState)
 
 
@@ -78,5 +78,5 @@ if __name__ == "__main__":
     current_theta = [0.0]*3
 
     rospy.init_node('ikin', anonymous=True)
-    rospy.Subscriber('oint_pose', PoseStamped, inverse_kinematics)
+    rospy.Subscriber('oint', PoseStamped, inverse_kinematics)
     rospy.spin()

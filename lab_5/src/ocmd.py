@@ -19,13 +19,13 @@ def circle():
     y0 = 0.0
     z0 = 0.0
 
-    rospy.wait_for_service('oint')
+    rospy.wait_for_service('oint_control_srv')
     rate = rospy.Rate(freq)
     while not rospy.is_shutdown():
         x = x0 + ax * cos(th)
         y = y0 + ay * sin(th)
         z = z0 + az * sin(th)
-        interpolation = rospy.ServiceProxy('oint', oint)
+        interpolation = rospy.ServiceProxy('oint_control_srv', oint)
         resp1 = interpolation(x, y, z, 0.0, 0.0, 0.0, 1.0, t)
 
         th = th + dth

@@ -19,13 +19,15 @@ def ellipse():
     y0 = -0.5
     z0 = 0.8
 
+    interpol = rospy.ServiceProxy('oint_control_srv', oint)
+    interpol(x0 + ax*cos(theta), y0 + ay*sin(theta), z0 + az*sin(theta), 0.0, 0.0, 0.0, 1.0, 2.0)
+
     rospy.wait_for_service('oint_control_srv')
     rate = rospy.Rate(frequency)
     while not rospy.is_shutdown():
         x = x0 + ax * cos(theta)
         y = y0 + ay * sin(theta)
         z = z0 + az * sin(theta)
-        interpol = rospy.ServiceProxy('oint_control_srv', oint)
         move = interpol(x, y, z, 0.0, 0.0, 0.0, 1.0, t)
 
         theta = theta + dth

@@ -21,6 +21,9 @@ def rectangle():
     yLast = -0.1
 
     rospy.wait_for_service('oint_control_srv')
+    interpol = rospy.ServiceProxy('oint_control_srv', oint)
+    interpol(x, y, z, 0.0, 0.0, 0.0, 1.0, 2.0) # starting interpolation
+
     rate = rospy.Rate(frequency)
     while not rospy.is_shutdown():
         if x < xLast and round(y, 2) == y0:
@@ -34,7 +37,6 @@ def rectangle():
             y = y - ay
             z = z - az
 
-        interpol = rospy.ServiceProxy('oint_control_srv', oint)
         move = interpol(x, y, z, 0.0, 0.0, 0.0, 1.0, t)
 
         theta = theta + dth

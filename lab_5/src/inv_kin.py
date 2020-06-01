@@ -15,7 +15,7 @@ def handle_inversion(data):
     if x > 1.0 or x < 0.0 or y > 0.0 or y < -1.0 or z < 0.0 or z > 1.0:
     	rospy.logerr('Incorrect position - x: ' + str(x) + ', y: ' + str(y) + ', z: ' + str(z))
     	return
-    
+
     joint_state = JointState()
     joint_state.header = Header()
     joint_state.header.stamp = rospy.Time.now()
